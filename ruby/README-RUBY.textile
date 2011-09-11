@@ -1,0 +1,2 @@
+h2. References
+"Ruby API":http://ruby-doc.org/core/
