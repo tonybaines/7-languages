@@ -12,11 +12,12 @@ class Tree
     tree = structure.collect do |name,children|
       child_nodes = []
       unless children.nil?
-        child_nodes << from_hash(children)
+        c = from_hash(children)
+        child_nodes << c unless c.nil? # avoid Nil entries
       end
       Tree.new(name,child_nodes.flatten)
     end
-    tree.size > 1 ? tree : tree[0]
+    tree.size > 1 ? tree : tree[0] # just return a Tree if there's on entry
   end
 
   def visit_all(&block)
@@ -29,8 +30,6 @@ class Tree
   end
 end
 
-family_tree = Tree.from_hash({'top' => {'level1.1' => {}, 'level1.2' => {}}})
-family_tree.visit_all {|node| puts node.node_name}
 
 ruby_tree = Tree.new( "Ruby" ,
 [Tree.new("Reia" ),
@@ -43,15 +42,16 @@ puts
 puts "visiting entire tree"
 ruby_tree.visit_all {|node| puts node.node_name}
 
-#family_tree = Tree.from_hash({ 
-#'grandpa' => { 
-#    'dad' => {
-#      'child 1' => {}, 
-#      'child 2' => {} 
-#    }, 
-#    'uncle' => {
-#      'child 3' => {}, 
-#      'child 4' => {} 
-#    } 
-#  } 
-#})
+family_tree = Tree.from_hash({ 
+'grandpa' => { 
+    'dad' => {
+      'child 1' => {}, 
+      'child 2' => {} 
+    }, 
+    'uncle' => {
+      'child 3' => {}, 
+      'child 4' => {} 
+    } 
+  } 
+})
+family_tree.visit_all {|node| puts node.node_name}
