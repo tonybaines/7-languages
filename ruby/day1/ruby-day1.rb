@@ -7,6 +7,19 @@ puts "Hello, world"
 "Hello, Ruby".index 'Ruby' 
 # => 7
 
+(1..10).each {|i| puts "This is sentence number #{i}"}
+# This is sentence number 1
+# This is sentence number 2
+# This is sentence number 3
+# This is sentence number 4
+# This is sentence number 5
+# This is sentence number 6
+# This is sentence number 7
+# This is sentence number 8
+# This is sentence number 9
+# This is sentence number 10
+# => 1..10
+
 10.times do
   puts "Tony\n"
 end
