@@ -1,0 +1,15 @@
+Io> 1 + 1
+==> 2
+Io> 1 + "ONE"
+
+  Exception: argument 0 to method '+' must be a Number, not a 'Sequence'
+  ---------
+  message '+' in 'Command Line' on line 1
+
+Io> "One" + 1
+
+  Exception: Io Assertion 'operation not valid on non-number encodings'
+  ---------
+  message '+' in 'Command Line' on line 1
+
+So strongly typed
