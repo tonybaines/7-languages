@@ -1,3 +1,9 @@
+http://iolanguage.com/about/samplecode/
+http://ozone.wordpress.com/2006/03/15/blame-it-on-io/
+http://www.iolanguage.com/about/samplecode/
+http://jetpackweb.com/blog/2011/02/08/io-language-addons-and-making-them-work-in-ubuntu/
+http://en.wikibooks.org/wiki/Io_Programming/Io_Style_Guide
+
 Io> 1 + 1
 ==> 2
 Io> 1 + "ONE"
@@ -12,4 +18,33 @@ Io> "One" + 1
   ---------
   message '+' in 'Command Line' on line 1
 
-So strongly typed
+So, strongly typed
+
+Io> if("")
+==> true
+Io> if(0)
+==> true
+Io> if(1)
+==> true
+Io> if(nil)
+==> false
+
+
+Io> Object slotNames sort
+==> list(, !=, -, .., <, <=, ==, >, >=, ?, @, @@, actorProcessQueue, actorRun, ancestorWithSlot, ancestors, and, appendProto, apropos, argIsActivationRecord,
+...
+
+Io> Object slotSummary
+==>  Object_0x137f9e0:
+...
+  cloneWithoutInit = Object_cloneWithoutInit()
+  compare          = Object_compare()
+...
+
+
+operator 	action
+::= 		Creates slot, creates setter, assigns value
+:= 		Creates slot, assigns value
+= 		Assigns value to slot if it exists, otherwise raises exception 
+
+
