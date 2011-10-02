@@ -9,7 +9,7 @@ HotMilk := Object clone do (
 )
 
 Latte := Espresso clone do ( 
-	appendProto(HotMilk)
+	appendProto(HotMilk) // mixin
 	taste = method(
 		tastes := self protos map(p, if(p hasSlot("taste"), p taste))
 		tastes join(" and ")
@@ -18,4 +18,6 @@ Latte := Espresso clone do (
 
 myLatte := Latte clone
 
-write(myLatte taste .."\n")
+write(Espresso taste .. "\n") // => Intense
+write(HotMilk taste .. "\n") // => Creamy
+write(myLatte taste .."\n") // => Intense and Creamy
