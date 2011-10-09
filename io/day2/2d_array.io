@@ -1,26 +1,49 @@
 #!/usr/local/bin/io
 
 List sum2d := method (
-  self map(subList, subList sum) sum
+  self map(subList, 
+    if(subList isEmpty, 0, subList select(x, x!=nil) sum)
+  ) sum
 )
 
 TwoDeeList := List clone do (
-  ys := list()
-
   dim := method (x,y,
-    ys setSize(y)
+    self setSize(y)
     for(i,1,y, 
       xs := list()
       xs setSize(x)
-      ys atPut(i-1, xs)
+      self atPut(i-1, xs)
     )
   )
   
   get := method(x,y,
-    (ys at(y-1)) at(x-1)
+    (self at(y-1)) at(x-1)
   )
   set := method(x,y,value,
-    (ys at(y-1)) atPut(x-1, value)
+    (self at(y-1)) atPut(x-1, value)
+  )
+  
+  toFile := method (name,
+    file := File clone openForUpdating(name)
+    self foreach(x,
+      file write((x join(",")), "\n")
+    )
+    file close
+  )
+  
+  fromFile := method (name,
+    file := File clone openForReading(name)
+    lines := file readLines
+    file close
+    self setSize(lines size)
+    lines foreach(i, line,
+      xs := (line split(",")) map(it, 
+                                if(it == "nil", nil, it asNumber)
+                              )
+      writeln(xs)
+      self atPut(i, xs)
+    )
+    self
   )
 )
 
@@ -28,21 +51,43 @@ Suite := UnitTest clone do(
   testShouldSumASimple2dListWithOneEntry := method (
     assertEquals(1, list(list(1)) sum2d)
   )
+  testShouldSumASimple2dListWithOneEmptyEntry := method (
+    assertEquals(0, list(list()) sum2d)
+  )
   testShouldSumA2dListWithOneSubListWithTwoEntries := method (
     assertEquals(3, list(list(1,2)) sum2d)
   )
   testShouldSumA2dListWithTwoSubListEachWithTwoEntries := method (
     assertEquals(10, list(list(1,2), list(3,4)) sum2d)
   )
-  
-  testShouldCreateA2dList := method (
-    my2dList := TwoDeeList clone
+  testShouldSumASimple2dListIgnoringNilEntries := method (
+    assertEquals(3, list(list(1,nil,2)) sum2d)
+  )
+)
+Suite run
+
+MatrixSuite := UnitTest clone do(
+  my2dList := TwoDeeList clone
+    
+  setUp = method (
     my2dList dim(3,3)
     my2dList set(2,2,1)
     my2dList set(3,2,15)
+  )
+  testShouldCreateA2dList := method (
+    assertNil(my2dList get(1,1))
     assertEquals(1, my2dList get(2,2))
     assertEquals(15, my2dList get(3,2))
   )
+  
+  testShouldWriteAndReadAMatrixAsAFile := method (
+    my2dList toFile("matrix.csv")
+    
+    myOther2dList := TwoDeeList fromFile("matrix.csv")
+    assertNil(1, myOther2dList get(1,1))
+    assertEquals(1, myOther2dList get(2,2))
+    assertEquals(15, myOther2dList get(3,2))
+  )
 )
 
-Suite run
+MatrixSuite run
