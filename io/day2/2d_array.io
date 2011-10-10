@@ -35,15 +35,15 @@ TwoDeeList := List clone do (
     file := File clone openForReading(name)
     lines := file readLines
     file close
-    self setSize(lines size)
+    new2dList := TwoDeeList clone
+    new2dList setSize(lines size)
     lines foreach(i, line,
       xs := (line split(",")) map(it, 
                                 if(it == "nil", nil, it asNumber)
                               )
-      writeln(xs)
-      self atPut(i, xs)
+      new2dList atPut(i, xs)
     )
-    self
+    new2dList
   )
 )
 
@@ -71,11 +71,12 @@ MatrixSuite := UnitTest clone do(
     
   setUp = method (
     my2dList dim(3,3)
+    my2dList set(1,1,2)
     my2dList set(2,2,1)
     my2dList set(3,2,15)
   )
   testShouldCreateA2dList := method (
-    assertNil(my2dList get(1,1))
+    assertNil(my2dList get(1,2))
     assertEquals(1, my2dList get(2,2))
     assertEquals(15, my2dList get(3,2))
   )
@@ -84,9 +85,13 @@ MatrixSuite := UnitTest clone do(
     my2dList toFile("matrix.csv")
     
     myOther2dList := TwoDeeList fromFile("matrix.csv")
-    assertNil(1, myOther2dList get(1,1))
+
+    assertNil(myOther2dList get(1,2))     
     assertEquals(1, myOther2dList get(2,2))
     assertEquals(15, myOther2dList get(3,2))
+    
+    assertEquals(my2dList asString, myOther2dList asString)
+    writeln(myOther2dList)
   )
 )
 
