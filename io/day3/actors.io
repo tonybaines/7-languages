@@ -14,22 +14,47 @@
  */
  
  Scorer := Object clone do (
+   numberOfRounds := 0
+   scores := Map clone
+   playersByName := Map clone
    startGame := method ( _players, _numberOfRounds,
      "Go!" println
-     players := _players
-     numberOfRounds := _numberOfRounds
+     _players foreach(player, 
+       playersByName atPut(player name, player)
+       scores atPut(player name, 0)
+     )
+     numberOfRounds = _numberOfRounds
      
+     _players first tag
    )
    
-   scoreFor := method(
-     0
+   notify := method(player,
+     incrementScoreFor(player)
+   )
+   
+   incrementScoreFor := method(player,
+     writeln("Incrementing the score for " .. player name)
+     scores atPut(player name, scoreFor(player)+1)
+   )
+   
+   scoreFor := method(player,
+     scores at(player name)
    )
  )
  
  Player := Object clone do (
+   players := list()
+   scorer := nil
    name := "anonymous"
-   getReady := method(scorer, players,
+   getReady := method(_scorer, _players,
+     scorer = _scorer
+     players = _players
      writeln(self name .. " Ready!")
+   )
+   
+   tag := method (
+     writeln(self name .. " tagged")
+     scorer notify(self)
    )
  )
  
@@ -48,8 +73,8 @@
     player2 getReady(scorer, players)
     scorer startGame(players, 1)
     
-    assertEquals(1, scorer scoreFor(player2))
-    assertEquals(0, scorer scoreFor(player1))
+    assertEquals(0, scorer scoreFor(player2))
+    assertEquals(1, scorer scoreFor(player1))
   )
  )
  
