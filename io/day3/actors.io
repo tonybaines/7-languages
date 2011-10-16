@@ -122,9 +122,10 @@ Suite := UnitTest clone do(
     assertEquals(1, scorer scoreFor(player1) + scorer scoreFor(player2))
   )
   
+/*  
+  While this was true when running sequentially
+  multi-threading races make it non-deterministic
   
-  /* While this was true when running sequentially
-     multi-threading races make it non-deterministic
   testPlayersShouldPickAnotherPlayerToTag := method(
     scorer startGame(players, 2)
     writeln(scorer @theWinnerIs .. " wins!")
