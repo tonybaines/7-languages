@@ -82,7 +82,7 @@
      writeln(self name .. " tagged")
      wait(1) // yield works just as well
      if(stillGoing,
-       scorer notify(self) // For some reason, sending this asynchronously means the score is never updated
+       scorer @@notify(self) // Let the Scorer know what is going on
        nextPlayer @@tag // Send a message to the next player
      )
    )
@@ -116,8 +116,7 @@ Suite := UnitTest clone do(
   
   testTheScorerShouldRecordWhoHasBeenTagged := method(
     scorer startGame(players, 1)
-    // Must do something with a future in order to wait
-    writeln(scorer @theWinnerIs .. " wins!")
+    writeln(scorer theWinnerIs .. " wins!")
     
     assertEquals(1, scorer scoreFor(player1) + scorer scoreFor(player2))
   )
@@ -134,7 +133,7 @@ Suite := UnitTest clone do(
     assertEquals(1, scorer scoreFor(player2))    
   )
 */  
-  testTheTotalScoreForAGameShouldBeTheSAmeAsTheNumberOfTurns := method(
+  testTheTotalScoreForAGameShouldBeTheSameAsTheNumberOfTurns := method(
     player3 := Player clone do (
       name = "Player 3"
     )
@@ -151,9 +150,10 @@ Suite := UnitTest clone do(
     player3 getReady(scorer, morePlayers)
     player4 getReady(scorer, morePlayers)
     
-    scorer @startGame(morePlayers, 20)
-    writeln(scorer @theWinnerIs .. " wins!")
-        
+    scorer startGame(morePlayers, 20)
+    
+    writeln(scorer theWinnerIs .. " wins!")
+    
     assertEquals(20, scorer totalScore)
   )
 )

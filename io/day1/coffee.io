@@ -13,7 +13,7 @@ Latte := Espresso clone do (
 	taste = method(
 		// Collect the tastes of all prototypes in the heirarchy that 
 		// _have_ a 'taste' slot
-		tastes := self protos map(p, if(p hasSlot("taste"), p perform("taste")))
+		tastes := self protos map(p, p ?taste)
 		tastes join(" and ")
 	)
 )
