@@ -9,4 +9,7 @@ end
 
 my_array.each_slice(4) do |it|
   p it # what is the difference between 'p' and puts/print ?
+# print - print it
+# puts - to_s and trim
+# p - inspect()
 end
