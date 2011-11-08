@@ -1,6 +1,4 @@
-/*
-http://news.ycombinator.com/item?id=1977875
-*/
+/* http://progopedia.com/implementation/swi-prolog/ */
 
 fib(0,0).
 fib(1,1).
