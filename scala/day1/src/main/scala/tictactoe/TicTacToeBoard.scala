@@ -1,14 +1,5 @@
 package tictactoe
 
-object TicTacToeBoard {
-  val TEMPLATE_GRID = """
-%c|%c|%c
------
-%c|%c|%c
------
-%c|%c|%c"""
-}
-
 class TicTacToeBoard(board: List[Char]) {
   def this() = {
     this(List(' ', ' ', ' ',     
