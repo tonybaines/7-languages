@@ -3,6 +3,7 @@
 bin
 build
 .cache
+.classpath
 .gradle/
 matrix.csv
 matrix.csv~
