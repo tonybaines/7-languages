@@ -1,29 +1,36 @@
 package tictactoe
 
-class TicTacToeBoard(board: List[Char]) {
+
+object TicTacToeBoard {
+  val Blank = ' '
+}
+
+import TicTacToeBoard._
+class TicTacToeBoard(cells: List[Char]) {
   def this() = {
-    this(List(' ', ' ', ' ',     
-              ' ', ' ', ' ',
-              ' ', ' ', ' '))
+    this(List(Blank, Blank, Blank,     
+              Blank, Blank, Blank,
+              Blank, Blank, Blank))
   }
   def rows: List[List[Char]] = {
-    List(board.slice(0,3), board.slice(3,6), board.slice(6,9))
+    List(cells.slice(0,3), cells.slice(3,6), cells.slice(6,9))
   }
   
   def columns: List[List[Char]] = {
-    List(List(board(0), board(3), board(6)), 
-         List(board(1), board(4), board(7)), 
-         List(board(2), board(5), board(8)))
+    List(List(cells(0), cells(3), cells(6)), 
+         List(cells(1), cells(4), cells(7)), 
+         List(cells(2), cells(5), cells(8)))
   }
   
   def diagonals: List[List[Char]] = {
-    List(List(board(0), board(4), board(8)),
-         List(board(2), board(4), board(6)))
+    List(List(cells(0), cells(4), cells(8)),
+         List(cells(2), cells(4), cells(6)))
   }
   
   private def winningLinesIn(lines: List[List[Char]]): List[List[Char]] = {
     lines.filter { it =>
-      it.distinct.size == 1 && it.distinct(0) == it(0) && it(0) != ' '
+      it.distinct.size == 1 && // Just one character fills the collection
+      it(0) != Blank  // ignore all blanks
     }
   }
   
@@ -43,15 +50,15 @@ class TicTacToeBoard(board: List[Char]) {
     }
     else None
   }
-  
+
   override def toString(): String = {
     """
 %c|%c|%c
 -----
 %c|%c|%c
 -----
-%c|%c|%c""".format(board(0),board(1),board(2),
-                   board(3),board(4),board(5),
-                   board(6),board(7),board(8))
+%c|%c|%c""".format(cells(0),cells(1),cells(2),
+                   cells(3),cells(4),cells(5),
+                   cells(6),cells(7),cells(8))
   }
 }
