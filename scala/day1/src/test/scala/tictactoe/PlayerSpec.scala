@@ -20,7 +20,7 @@ class PlayerSpec extends Spec with ShouldMatchers {
     }
   }
   
-  describe("A player starting with a row which can be completed") {
+  describe("A player playing with a row which can be completed") {
     val state = List('X','0',' ',
                      '0','0',' ',
                      'X','X','0')
@@ -35,5 +35,13 @@ X|0|
 X|X|0""")
       newState.wonBy() should be (Some('0'))
     }
+  }
+  
+  describe("A player playing with a column which can be completed"){
+    val state = List(' ','0',' ',
+                     'X','0',' ',
+                     ' ',' ','X')
+    val board = new TicTacToeBoard(state)
+    it("should make the winning move, ignoring preceeding columns")(pending)
   }
 }
