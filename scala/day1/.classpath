@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/scala"/>
+	<classpathentry kind="src" path="src/test/scala"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER" exported="true"/>
+	<classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+	<classpathentry sourcepath="/home/tony/.gradle/caches/artifacts-3/org.scalatest/scalatest_2.9.0/ad2189a57f89ed88dca828493dd0c18f/sources/scalatest_2.9.0-1.6.1-sources.jar" kind="lib" path="/home/tony/.gradle/caches/artifacts-3/org.scalatest/scalatest_2.9.0/ad2189a57f89ed88dca828493dd0c18f/jars/scalatest_2.9.0-1.6.1.jar" exported="true"/>
+	<classpathentry sourcepath="/home/tony/.gradle/caches/artifacts-3/org.scala-lang/scala-library/ad2189a57f89ed88dca828493dd0c18f/sources/scala-library-2.9.1-sources.jar" kind="lib" path="/home/tony/.gradle/caches/artifacts-3/org.scala-lang/scala-library/ad2189a57f89ed88dca828493dd0c18f/jars/scala-library-2.9.1.jar" exported="true"/>
+	<classpathentry sourcepath="/home/tony/.gradle/caches/artifacts-3/junit/junit/ad2189a57f89ed88dca828493dd0c18f/sources/junit-4.8-sources.jar" kind="lib" path="/home/tony/.gradle/caches/artifacts-3/junit/junit/ad2189a57f89ed88dca828493dd0c18f/jars/junit-4.8.jar" exported="true"/>
+</classpath>

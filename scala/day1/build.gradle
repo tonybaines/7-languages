@@ -1,0 +1,33 @@
+apply plugin: 'scala'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'project-reports'
+
+scalaVersion = '2.9.1'
+
+// Use the Scala fsc daemon to improve compile times
+compileScala.scalaCompileOptions.useCompileDaemon=true
+compileTestScala.scalaCompileOptions.useCompileDaemon=true
+
+repositories {
+    mavenRepo urls: "http://scala-tools.org/repo-releases"
+}
+
+dependencies {
+    scalaTools "org.scala-lang:scala-compiler:$scalaVersion"
+    scalaTools "org.scala-lang:scala-library:$scalaVersion"
+    compile "org.scala-lang:scala-library:$scalaVersion"
+
+    testCompile "org.scalatest:scalatest_2.9.0:1.6.1"
+    testCompile 'junit:junit:4.8'
+}
+
+task test(overwrite: true, dependsOn: testClasses) << {
+  ant.taskdef(name: 'scalatest', classname: 'org.scalatest.tools.ScalaTestAntTask', classpath: configurations.testCompile.asPath)
+  ant.scalatest(parallel: true) {
+    runpath {
+       pathelement(path: configurations.testRuntime.asPath)
+    }
+    reporter(type: 'stdout')
+  }
+}
