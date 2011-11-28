@@ -7,7 +7,7 @@ author('Terry Pratchet').
 
 wrote('Excession', 'Ian M. Banks').
 wrote('Neuromancer', 'William Gibson').
-wrote('Snow_crash', 'Neil Stephenson').
+wrote('Snow Crash', 'Neil Stephenson').
 wrote('Chronicles of Thomas Covenant', 'Stephen Donaldson').
 wrote('Count Zero', 'William Gibson').
 wrote('Player Of Games', 'Ian M. Banks').
