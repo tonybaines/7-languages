@@ -16,10 +16,29 @@ class Player(symbol: Char) {
     var lastAttempt = winByRows(board)
     
     if(lastAttempt.failed) lastAttempt = winByColumns(board)
+    if(lastAttempt.failed) lastAttempt = winByDiagonals(board)
     if(lastAttempt.failed) lastAttempt = fillFirstEmptyCell(board)
     
     new TicTacToeBoard(lastAttempt.result)
   }
+  
+  private def winByDiagonals(board: TicTacToeBoard): Attempt = {
+    val diagonals = board.diagonals
+    val rows = board.rows
+    val attempts = tryToWinByGroups(diagonals)
+    attempts match {
+      case List(Attempt(true, result),_) => Attempt(true, List(
+          result(0),rows(0)(1),rows(0)(2),
+          rows(1)(0),result(1),rows(1)(2),
+          rows(2)(0),rows(2)(1),result(2)))
+      case List(_,Attempt(true, result)) => Attempt(true, List(
+          rows(0)(0),rows(0)(1),result(0),
+          rows(1)(0),result(1),rows(1)(2),
+          result(2),rows(2)(1),rows(2)(2)))
+      case _ => Attempt(false, rows.flatten)
+    }
+  }
+  
   
   private def winByColumns(board: TicTacToeBoard): Attempt = {
     val groups = board.columns
@@ -30,7 +49,7 @@ class Player(symbol: Char) {
       case List(Attempt(true,result),_,_) => Attempt(true, List(result, groups(1), groups(2)).transpose.flatten)
       case List(_,Attempt(true,result),_) => Attempt(true, List(groups(0), result, groups(2)).transpose.flatten)
       case List(_,_,Attempt(true,result)) => Attempt(true, List(groups(0), groups(1), result).transpose.flatten)
-      case List(_,_,_) => Attempt(false, List(groups(0), groups(1), groups(2)).transpose.flatten)
+      case _ => Attempt(false, List(groups(0), groups(1), groups(2)).transpose.flatten)
     }
   }
   
@@ -43,7 +62,7 @@ class Player(symbol: Char) {
       case List(Attempt(true,result),_,_) => Attempt(true, result  ::: groups(1) ::: groups(2))
       case List(_,Attempt(true,result),_) => Attempt(true, groups(0) ::: result  ::: groups(2))
       case List(_,_,Attempt(true,result)) => Attempt(true, groups(0) ::: groups(1) ::: result)
-      case List(_,_,_) => Attempt(false, groups(0) ::: groups(1) ::: groups(2))
+      case _ => Attempt(false, groups(0) ::: groups(1) ::: groups(2))
     }
   }
   
