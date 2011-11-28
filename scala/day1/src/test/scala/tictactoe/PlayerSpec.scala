@@ -42,6 +42,15 @@ X|X|0""")
                      'X','0',' ',
                      ' ',' ','X')
     val board = new TicTacToeBoard(state)
-    it("should make the winning move, ignoring preceeding columns")(pending)
+    it("should make the winning move, ignoring preceeding columns") {
+      val newState = player.play(board)
+      newState.toString() should be ("""
+ |0| 
+-----
+X|0| 
+-----
+ |0|X""")
+      newState.wonBy() should be (Some('0'))
+    }
   }
 }

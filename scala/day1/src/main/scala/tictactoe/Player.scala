@@ -15,25 +15,41 @@ class Player(symbol: Char) {
   def play(board: TicTacToeBoard): TicTacToeBoard = {
     var lastAttempt = winByRows(board)
     
-    if(lastAttempt.failed) {
-        lastAttempt = fillFirstEmptyCell(board)
-    }
+    if(lastAttempt.failed) lastAttempt = winByColumns(board)
+    if(lastAttempt.failed) lastAttempt = fillFirstEmptyCell(board)
     
     new TicTacToeBoard(lastAttempt.result)
   }
   
-  private def winByRows(board: TicTacToeBoard): Attempt = {
-    val rows = board.rows
-    val attempts = rows.map { row =>
-      tryToComplete(row)
-    }
- 
+  private def winByColumns(board: TicTacToeBoard): Attempt = {
+    val groups = board.columns
+    val attempts = tryToWinByGroups(groups)
+    
     // This is a bit too brute force, is there a list processing approach?
     attempts match {
-      case List(Attempt(true,result),_,_) => Attempt(true, result  ::: rows(1) ::: rows(2))
-      case List(_,Attempt(true,result),_) => Attempt(true, rows(0) ::: result  ::: rows(2))
-      case List(_,_,Attempt(true,result)) => Attempt(true, rows(0) ::: rows(1) ::: result)
-      case List(_,_,_) => Attempt(false, rows(0) ::: rows(1) ::: rows(2))
+      case List(Attempt(true,result),_,_) => Attempt(true, List(result, groups(1), groups(2)).transpose.flatten)
+      case List(_,Attempt(true,result),_) => Attempt(true, List(groups(0), result, groups(2)).transpose.flatten)
+      case List(_,_,Attempt(true,result)) => Attempt(true, List(groups(0), groups(1), result).transpose.flatten)
+      case List(_,_,_) => Attempt(false, List(groups(0), groups(1), groups(2)).transpose.flatten)
+    }
+  }
+  
+  private def winByRows(board: TicTacToeBoard): Attempt = {
+    val groups = board.rows
+    val attempts = tryToWinByGroups(groups)
+    
+    // This is a bit too brute force, is there a list processing approach?
+    attempts match {
+      case List(Attempt(true,result),_,_) => Attempt(true, result  ::: groups(1) ::: groups(2))
+      case List(_,Attempt(true,result),_) => Attempt(true, groups(0) ::: result  ::: groups(2))
+      case List(_,_,Attempt(true,result)) => Attempt(true, groups(0) ::: groups(1) ::: result)
+      case List(_,_,_) => Attempt(false, groups(0) ::: groups(1) ::: groups(2))
+    }
+  }
+  
+  private def tryToWinByGroups(groups: List[List[Char]]): List[Attempt] = {
+    groups.map { group =>
+      tryToComplete(group)
     }
   }
   
