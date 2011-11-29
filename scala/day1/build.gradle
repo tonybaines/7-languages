@@ -1,0 +1,19 @@
+apply plugin: 'scala'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'project-reports'
+
+scalaVersion = '2.9.1'
+
+repositories {
+    mavenRepo urls: "http://scala-tools.org/repo-releases"
+}
+
+dependencies {
+    scalaTools "org.scala-lang:scala-compiler:$scalaVersion"
+    scalaTools "org.scala-lang:scala-library:$scalaVersion"
+    compile "org.scala-lang:scala-library:$scalaVersion"
+
+    testCompile "org.scalatest:scalatest_$scalaVersion:1.6.1"
+    testCompile 'junit:junit:4.8'
+}

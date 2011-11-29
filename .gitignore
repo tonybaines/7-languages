@@ -1,5 +1,11 @@
+*~
 2d_array.io~
+bin
+build
+.cache
+.classpath
+.gradle/
 matrix.csv
 matrix.csv~
+.settings/
 *.swp
-*~
