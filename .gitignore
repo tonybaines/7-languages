@@ -3,9 +3,14 @@
 bin
 build
 .cache
+classes
 .classpath
+.clover
 .gradle/
+.idea
 matrix.csv
 matrix.csv~
+project
 .settings/
 *.swp
+target

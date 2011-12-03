@@ -1,12 +1,12 @@
 apply plugin: 'scala'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'project-reports'
 
+eclipse.project.name = '7 Languages: Scala Day 1'
 scalaVersion = '2.9.1'
 
 repositories {
-    mavenRepo urls: "http://scala-tools.org/repo-releases"
+    maven { url "http://scala-tools.org/repo-releases" }
 }
 
 dependencies {
@@ -16,4 +16,14 @@ dependencies {
 
     testCompile "org.scalatest:scalatest_$scalaVersion:1.6.1"
     testCompile 'junit:junit:4.8'
+}
+
+task test(overwrite: true, dependsOn: testClasses) << {
+  ant.taskdef(name: 'scalatest',
+      classname: 'org.scalatest.tools.ScalaTestAntTask',
+      classpath: sourceSets.test.runtimeClasspath.asPath
+  )
+  ant.scalatest(runpath: sourceSets.test.output.classesDir,
+      haltonfailure: 'true',
+      fork: 'false') {reporter(type: 'stdout')}
 }
