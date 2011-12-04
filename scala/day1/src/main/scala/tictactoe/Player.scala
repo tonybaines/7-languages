@@ -8,21 +8,30 @@ import TicTacToeBoard._
 import Player._
 class Player(symbol: Char) {
   
-  private case class Attempt(val wasASuccess: Boolean, result: List[Char]) 
+  case class Attempt(val wasASuccess: Boolean, result: List[Char]) 
 
   def play(board: TicTacToeBoard): TicTacToeBoard = {
     val strategies = List(winByRows _, winByColumns _, winByDiagonals _, fillFirstEmptyCell _)
-    
-    val options = strategies.map { strategy: ((TicTacToeBoard) => Attempt) =>
-      strategy(board) 
-    }
-    
-    // The first strategy to come up with a successful attempt
-    val move = options.filter(attempt => attempt.wasASuccess)(0) 
-    
+    val move = firstSuccessfulAttempt(board, strategies.head, strategies.tail)
     new TicTacToeBoard(move.result)
   }
   
+
+  private def firstSuccessfulAttempt(board: TicTacToeBoard, strategy: ((TicTacToeBoard) => Attempt), followOnStrategies: List[((TicTacToeBoard) => Attempt)]): Attempt = {
+    val outcome = strategy(board)
+    if (outcome.wasASuccess) outcome
+    else if(followOnStrategies.isEmpty) Attempt(false, outcome.result)
+    else firstSuccessfulAttempt(board, followOnStrategies.head, followOnStrategies.tail)
+  }
+  
+  /*
+  private def winByRowsNew(board: TicTacToeBoard): Attempt = {
+    List((0,1,2), (3,4,5), (6,7,8))
+    Try each group of indexes-of-cells-that-can-be-updated and 
+      return an Attempt with the full board as a result
+    Find and return the first Attempt that wasASuccess  
+  }
+  */
   private def winByRows(board: TicTacToeBoard): Attempt = {
     val groups = board.rows
     val attempts = tryToWinByGroups(groups)
