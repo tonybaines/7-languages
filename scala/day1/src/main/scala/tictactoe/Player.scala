@@ -12,91 +12,71 @@ class Player(symbol: Char) {
 
   def play(board: TicTacToeBoard): TicTacToeBoard = {
     val strategies = List(winByRows _, winByColumns _, winByDiagonals _, fillFirstEmptyCell _)
-    val move = firstSuccessfulAttempt(board, strategies.head, strategies.tail)
+    val move = firstSuccessfulAttempt(board.cells, strategies)
     new TicTacToeBoard(move.result)
   }
   
-
-  private def firstSuccessfulAttempt(board: TicTacToeBoard, strategy: ((TicTacToeBoard) => Attempt), followOnStrategies: List[((TicTacToeBoard) => Attempt)]): Attempt = {
-    val outcome = strategy(board)
-    if (outcome.wasASuccess) outcome
-    else if(followOnStrategies.isEmpty) Attempt(false, outcome.result)
-    else firstSuccessfulAttempt(board, followOnStrategies.head, followOnStrategies.tail)
+  private def winByRows(cells: List[Char]): Attempt = {
+    firstSuccessfulAttempt(cells,
+        List(cellGroupStrategy(List(0,1,2)), 
+             cellGroupStrategy(List(3,4,5)),
+             cellGroupStrategy(List(6,7,8))
+        )
+    )
+  }
+  
+  private def winByColumns(cells: List[Char]): Attempt = {
+    firstSuccessfulAttempt(cells,
+        List(cellGroupStrategy(List(0,3,6)), 
+             cellGroupStrategy(List(1,4,7)),
+             cellGroupStrategy(List(2,5,8))
+        )
+    )
+  }
+  
+  private def winByDiagonals(cells: List[Char]): Attempt = {
+    firstSuccessfulAttempt(cells,
+        List(cellGroupStrategy(List(0,4,8)), 
+             cellGroupStrategy(List(2,4,6))))
   }
   
   /*
-  private def winByRowsNew(board: TicTacToeBoard): Attempt = {
-    List((0,1,2), (3,4,5), (6,7,8))
-    Try each group of indexes-of-cells-that-can-be-updated and 
-      return an Attempt with the full board as a result
-    Find and return the first Attempt that wasASuccess  
-  }
-  */
-  private def winByRows(board: TicTacToeBoard): Attempt = {
-    val groups = board.rows
-    val attempts = tryToWinByGroups(groups)
-    
-    // This is a bit too brute force, is there a list processing approach?
-    attempts match {
-      case List(Attempt(true,result),_,_) => Attempt(true, result  ::: groups(1) ::: groups(2))
-      case List(_,Attempt(true,result),_) => Attempt(true, groups(0) ::: result  ::: groups(2))
-      case List(_,_,Attempt(true,result)) => Attempt(true, groups(0) ::: groups(1) ::: result)
-      case _ => Attempt(false, groups(0) ::: groups(1) ::: groups(2))
-    }
-  }
-    
-  private def winByColumns(board: TicTacToeBoard): Attempt = {
-    val groups = board.columns
-    val attempts = tryToWinByGroups(groups)
-    
-    // This is a bit too brute force, is there a list processing approach?
-    attempts match {
-      case List(Attempt(true,result),_,_) => Attempt(true, List(result, groups(1), groups(2)).transpose.flatten)
-      case List(_,Attempt(true,result),_) => Attempt(true, List(groups(0), result, groups(2)).transpose.flatten)
-      case List(_,_,Attempt(true,result)) => Attempt(true, List(groups(0), groups(1), result).transpose.flatten)
-      case _ => Attempt(false, List(groups(0), groups(1), groups(2)).transpose.flatten)
-    }
-  }
-  
-  private def winByDiagonals(board: TicTacToeBoard): Attempt = {
-    val diagonals = board.diagonals
-    val rows = board.rows
-    val attempts = tryToWinByGroups(diagonals)
-    attempts match {
-      case List(Attempt(true, result),_) => Attempt(true, List(
-          result(0),rows(0)(1),rows(0)(2),
-          rows(1)(0),result(1),rows(1)(2),
-          rows(2)(0),rows(2)(1),result(2)))
-      case List(_,Attempt(true, result)) => Attempt(true, List(
-          rows(0)(0),rows(0)(1),result(0),
-          rows(1)(0),result(1),rows(1)(2),
-          result(2),rows(2)(1),rows(2)(2)))
-      case _ => Attempt(false, rows.flatten)
-    }
-  }
-  
-  private def fillFirstEmptyCell(board: TicTacToeBoard): Attempt = {
-    val cells = board.rows.flatten
+   * Boring fall-back strategy
+   */
+  private def fillFirstEmptyCell(cells: List[Char]): Attempt = {
     if(cells.haveABlank) Attempt(true, fillAtFirstBlank(cells))
     else Attempt(false, cells)
   }
   
-  private def tryToWinByGroups(groups: List[List[Char]]): List[Attempt] = {
-    groups.map { group =>
-      tryToComplete(group)
-    }
+  /*
+   * Find a winning strategy from the supplied list, 
+   * return a successful Attempt or try the next strategy
+   */
+  private def firstSuccessfulAttempt(cells: List[Char], strategies: List[(List[Char] => Attempt)]): Attempt = {
+    val outcome = strategies(0)(cells)
+    if (outcome.wasASuccess) outcome
+    else if(strategies.tail.isEmpty) Attempt(false, outcome.result)
+    else firstSuccessfulAttempt(cells, strategies.tail)
+  } 
+  
+  /*
+   * Strategy suitable for currying to allow use in the firstSuccessfulAttempt(...) traversal
+   */
+  private def cellGroupStrategy(group: List[Int])(cells: List[Char]): Attempt = {
+    if(winnableFrom(List(cells(group(0)), cells(group(1)), cells(group(2))))) 
+      new Attempt(true, winWith(group, cells)) 
+    else 
+      new Attempt(false, cells)
   }
   
-  private def tryToComplete(cells: List[Char]): Attempt = {
-    if((cells.haveABlank) && (cells.countOf(this.symbol) == 2)) {
-      Attempt(true, fillAtFirstBlank(cells))
-    }
-    else Attempt(false, cells)
+  private def winnableFrom(values: List[Char]): Boolean = (values.haveABlank) && (values.countOf(this.symbol) == 2)
+  
+  private def winWith(group: List[Int], cells: List[Char]): List[Char] = {
+    (cells /: group) {(grid, index) => grid.updated(index, this.symbol)}
   }
   
   private def fillAtFirstBlank(cells: List[Char]): List[Char] = {
      val (head, remainder) = cells.splitAt(cells.indexOf(TicTacToeBoard.Blank))
      (head ::: this.symbol :: remainder.tail) // Substitute the blank for whatever my symbol is
-  }
-  
+  }  
 }
