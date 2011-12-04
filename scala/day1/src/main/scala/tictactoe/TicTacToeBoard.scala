@@ -35,20 +35,12 @@ class TicTacToeBoard(cells: List[Char]) {
   }
   
   def wonBy(): Option[Char] = {
-    val winningRow = winningLinesIn(rows)
-    val winningCol = winningLinesIn(columns)
-    val winningDiagonal = winningLinesIn(diagonals)
+    val winningLines = List(rows, columns, diagonals).map { lineGroup =>
+      val winners = winningLinesIn(lineGroup) 
+      if(winners.nonEmpty) winners else Nil
+    }.flatten.flatten // flatten down to a list of characters, only winning lines remain
     
-    if(winningRow.size > 0) {
-      Some(winningRow(0)(0))
-    }
-    else if (winningCol.size > 0) {
-      Some(winningCol(0)(0))
-    }
-    else if (winningDiagonal.size > 0) {
-      Some(winningDiagonal(0)(0))
-    }
-    else None
+    if(winningLines.nonEmpty) Some(winningLines(0)) else  None
   }
 
   override def toString(): String = {
