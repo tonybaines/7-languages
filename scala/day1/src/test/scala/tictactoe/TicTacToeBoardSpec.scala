@@ -17,30 +17,6 @@ class TicTacToeBoardSpec extends Spec with ShouldMatchers {
         " | | ")
     }
     
-    it("should have three empty rows") {
-      val rows = new TicTacToeBoard().rows
-      rows.size should be (3)
-      rows.foreach { row =>
-        row should be (List(' ',' ',' '))
-      }
-    }
-    
-    it("should have three empty columns") {
-      val columns = new TicTacToeBoard().columns
-      columns.size should be (3)
-      columns.foreach { col =>
-        col should be (List(' ',' ',' '))
-      }
-    }
-    
-    it("should have two empty diagonals") {
-      val diagonals = new TicTacToeBoard().diagonals
-      diagonals.size should be (2)
-      diagonals.foreach { diagonal =>
-        diagonal should be (List(' ',' ',' '))
-      }
-    }
-    
     it("should have no winner") {
       new TicTacToeBoard().wonBy() should be (None)
     }
@@ -59,23 +35,6 @@ X|0|0
 X|0|X
 -----
 X|X|0""")
-    }
-    
-    it("should have filled rows") {
-      board.rows(0) should be (List('X','0','0'))
-      board.rows(1) should be (List('X','0','X'))
-      board.rows(2) should be (List('X','X','0'))
-    }
-    
-    it("should have filled columns") {
-      board.columns(0) should be (List('X','X','X'))
-      board.columns(1) should be (List('0','0','X'))
-      board.columns(2) should be (List('0','X','0'))
-    }
-    
-    it("should have filled diagonals") {
-      board.diagonals(0) should be (List('X','0','0'))
-      board.diagonals(1) should be (List('0','0','X'))
     }
     
     it("should have been won by 'X'") {
