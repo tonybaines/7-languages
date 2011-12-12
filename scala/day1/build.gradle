@@ -6,6 +6,7 @@ eclipse.project.name = '7 Languages: Scala Day 1'
 scalaVersion = '2.9.1'
 
 repositories {
+    mavenCentral()
     maven { url "http://scala-tools.org/repo-releases" }
 }
 

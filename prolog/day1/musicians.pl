@@ -12,6 +12,8 @@ enjoys(classical, dino). enjoys(classical, betty). enjoys(classical, barney). en
 
 piece(Genre, Instrument, Who) :- plays(Who, Instrument), enjoys(Genre, Who).
 
+piece(Genre, Instrument) :- forall((plays(Who, Instrument), enjoys(Genre, Who)), writeln(Who)).
+
 /*
 ?- plays(Who, guitar).
 Who = fred ;

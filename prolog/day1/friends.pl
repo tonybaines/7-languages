@@ -10,4 +10,8 @@ likes(wallace, cheese).
 likes(grommit, cheese).
 likes(wendolene, sheep).
 friend(X, Y) :- \+(X = Y), likes(X, Z), likes(Y, Z).
-
+/*
+This definition works when a variable is passd in as one of the parameters
+X and Y are not bound when the equality check is done
+friend(X, Y) :- likes(X, Z), likes(Y, Z), \+(X = Y).
+*/
