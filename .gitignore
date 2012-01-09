@@ -12,5 +12,7 @@ matrix.csv
 matrix.csv~
 project
 .settings/
+splitter.beam
 *.swp
 target
+the_count.beam
