@@ -1,5 +1,4 @@
 *~
-2d_array.io~
 bin
 build
 .cache
@@ -9,10 +8,9 @@ classes
 .gradle/
 .idea
 matrix.csv
-matrix.csv~
+*~
 project
 .settings/
-splitter.beam
+*.beam
 *.swp
 target
-the_count.beam
