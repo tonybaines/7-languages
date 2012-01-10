@@ -1,5 +1,9 @@
 -module(splitter).
 -export([word_count/1]).
+-include_lib("eunit/include/eunit.hrl").
+
+%word_count_with_an_empty_string_test() -> 0 = word_count("")
+%run with splitter:test()
 
 word_count([]) -> 0;
 word_count([$ ]) -> 0; %% A space on its own
