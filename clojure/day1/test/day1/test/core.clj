@@ -15,3 +15,6 @@
   (is (= :list (collection-type (list 1 2 3))))
   (is (= :map (collection-type {:one 1, :two 2, :three 3})))
   (is (= :vector (collection-type [1 2 3]))))
+
+(deftest notacollection
+  (is (thrown? Exception (collection-type "a"))))
